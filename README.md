@@ -1,164 +1,65 @@
 # GLP-1 Opportunity Finder
 
-A research tool for exploring non-diabetes indications for GLP-1 drugs. This monorepo contains both the frontend (Next.js) and backend (FastAPI) components.
+A research tool for exploring non-diabetes indications for GLP-1 drugs.
 
-## Project Structure
+## 🚀 Quick Start
 
-```
-glp-1-opportunity-finder/
-├── frontend/          # Next.js React application
-├── backend/           # FastAPI Python backend
-└── README.md         # This file
-```
-
-## Quick Start
-
-### Option 1: Docker (Recommended)
-
-The easiest way to run the entire application:
-
-1. **Prerequisites**: Install [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
-
-2. **Run the application**:
-
-   **For production-like setup:**
+1. **Make sure you have Docker installed**
+2. **Run the app**:
    ```bash
    docker-compose up --build
    ```
+3. **Open your browser**: 
+   - Frontend: http://localhost:3000
+   - API docs: http://localhost:8005/docs
 
-   **For development with hot reload:**
+4. **Stop the app**: Press `Ctrl+C` or run `docker-compose down`
+
+## 🎯 Workshop Challenges
+
+This app is designed for hands-on AI-assisted coding practice. Pick a challenge and start coding:
+
+### Available Workshops:
+
+1. **📊 Export Report Feature** - Build a CSV download feature
    ```bash
-   docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build
+   git checkout workshop-1-export
    ```
-   
-   **Or use the convenience script:**
+
+2. **🐛 Debug Broken Prioritization** - Fix the scoring algorithm  
    ```bash
-   ./start.sh
+   git checkout workshop-2-debug
    ```
 
-This will:
-- Build and start both frontend and backend containers
-- Frontend available at `http://localhost:3000`
-- Backend API available at `http://localhost:8005`
-- API docs at `http://localhost:8005/docs`
+3. **🔍 Add Search Filters** - Build filtering UI components
+   ```bash
+   git checkout workshop-3-filters
+   ```
 
-3. **Stop the application**:
-```bash
-docker-compose down
-```
+4. **📈 Fix Data Parsing Bug** - Debug the data pipeline
+   ```bash
+   git checkout workshop-4-parsing
+   ```
 
-### Option 2: Manual Setup
+5. **⚡ Add Health Check** - Build monitoring tools
+   ```bash
+   git checkout workshop-5-health
+   ```
 
-### Backend Setup
+### How It Works:
+1. **Pick a workshop branch** (see above)
+2. **Read the challenge README** in that branch
+3. **Try fixing it yourself first**
+4. **Use AI assistance** with the provided example prompts
+5. **Check the solution** when you're done
 
-1. Navigate to the backend directory:
-```bash
-cd backend
-```
+## 💡 AI Coding Tips
 
-2. Create and activate a virtual environment:
-```bash
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+- Paste errors directly into your AI assistant
+- Ask it to explain unfamiliar code
+- Let it write tests and debug scripts
+- Treat it like a pair programming partner
 
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+---
 
-4. Start the backend server:
-```bash
-python3 main.py
-```
-
-The API will be available at `http://localhost:8005`
-
-### Frontend Setup
-
-1. Navigate to the frontend directory:
-```bash
-cd frontend
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Start the development server:
-```bash
-npm run dev
-```
-
-The frontend will be available at `http://localhost:3000`
-
-## Usage
-
-1. **Start the backend server** on `http://localhost:8005`
-2. **Start the frontend** on `http://localhost:3000`
-3. **Use the application**:
-   - Select a target molecule (e.g., GLP-1)
-   - Click "Search Literature" to find associated diseases
-   - Click "Estimate Prevalence" to get prevalence data
-   - Click "Prioritize Indications" to rank opportunities
-
-## API Endpoints
-
-The backend provides the following endpoints:
-
-- `GET /literature-search?target=GLP-1` - Find diseases associated with a molecule
-- `GET /estimate-prevalence?disease_name=Disease` - Get prevalence data for a disease
-- `POST /prioritize` - Prioritize a list of diseases
-
-## Features
-
-- **Mock Data**: Realistic but simulated data for demonstration
-- **Dynamic Responses**: Randomized results that feel authentic
-- **Simulated Delays**: 1-2 second delays to mimic real API calls
-- **Error Handling**: Graceful handling of missing data or API failures
-- **Responsive UI**: Modern, mobile-friendly interface
-- **Multi-molecule Support**: Works with different target molecules
-
-## Development
-
-### Docker Commands
-
-```bash
-# Start in production mode
-docker-compose up --build
-
-# Start in development mode (with hot reload)
-./start-dev.sh
-
-# Stop the application
-docker-compose down
-
-# View logs
-docker-compose logs -f
-
-# Rebuild specific service
-docker-compose build --no-cache backend
-docker-compose build --no-cache frontend
-```
-
-### Manual Development
-
-Both components support hot reloading during development. The frontend automatically proxies API calls to the backend when both are running locally.
-
-### Project Structure After Docker Setup
-
-```
-glp-1-opportunity-finder/
-├── frontend/              # Next.js React application
-│   ├── Dockerfile
-│   └── .dockerignore
-├── backend/               # FastAPI Python backend  
-│   ├── Dockerfile
-│   └── .dockerignore
-├── docker-compose.yml     # Production Docker setup
-├── docker-compose.override.yml  # Development overrides
-├── start.sh              # Quick start script
-├── start-dev.sh         # Development start script
-└── README.md
-``` 
+**Get ready to feel the power of AI-assisted coding! 🤖✨** 
