@@ -168,7 +168,7 @@ function ActionButton({ onClick, state, icon: Icon, title, description, step, di
         className="w-full justify-start h-auto p-4"
       >
         <div className="flex items-center space-x-3 w-full">
-          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 text-sm font-medium">
+          <div className="flex items-center justify-center w-8 h-8 min-w-8 rounded-full bg-blue-100 text-blue-600 text-sm font-semibold flex-shrink-0">
             {step}
           </div>
           <div className="flex-1 text-left">

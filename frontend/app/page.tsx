@@ -31,54 +31,17 @@ export default function Home() {
   const handleSearch = async () => {
     setActionStates((prev) => ({ ...prev, literature: "loading" }))
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-
-    const mockDiseases: Disease[] = [
-      {
-        id: "1",
-        name: "Alzheimer's Disease",
-        prevalence: "",
-        treatmentStatus: "",
-        priorityScore: 0,
-        sources: [],
-        summary: "Neurodegenerative disorder characterized by progressive cognitive decline.",
-        citations: ["Nature Medicine 2023", "Cell Metabolism 2022"],
-      },
-      {
-        id: "2",
-        name: "Non-Alcoholic Fatty Liver Disease",
-        prevalence: "",
-        treatmentStatus: "",
-        priorityScore: 0,
-        sources: [],
-        summary: "Liver condition not caused by alcohol consumption, linked to metabolic dysfunction.",
-        citations: ["Hepatology 2023", "Gastroenterology 2022"],
-      },
-      {
-        id: "3",
-        name: "Polycystic Ovary Syndrome",
-        prevalence: "",
-        treatmentStatus: "",
-        priorityScore: 0,
-        sources: [],
-        summary: "Hormonal disorder affecting reproductive-aged women.",
-        citations: ["Endocrine Reviews 2023", "JCEM 2022"],
-      },
-      {
-        id: "4",
-        name: "Inflammatory Bowel Disease",
-        prevalence: "",
-        treatmentStatus: "",
-        priorityScore: 0,
-        sources: [],
-        summary: "Chronic inflammatory condition of the digestive tract.",
-        citations: ["Nature Reviews Gastroenterology 2023"],
-      },
-    ]
-
-    setDiseases(mockDiseases)
-    setActionStates((prev) => ({ ...prev, literature: "success" }))
+    try {
+      const response = await fetch(`http://localhost:8005/literature-search?target=${encodeURIComponent(molecule)}`)
+      if (!response.ok) throw new Error('Failed to fetch literature data')
+      
+      const data = await response.json()
+      setDiseases(data.diseases)
+      setActionStates((prev) => ({ ...prev, literature: "success" }))
+    } catch (error) {
+      console.error('Literature search failed:', error)
+      setActionStates((prev) => ({ ...prev, literature: "error" }))
+    }
   }
 
   const handlePrevalence = async () => {
@@ -86,18 +49,46 @@ export default function Home() {
 
     setActionStates((prev) => ({ ...prev, prevalence: "loading" }))
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      const updatedDiseases = await Promise.all(
+        diseases.map(async (disease) => {
+          try {
+            const response = await fetch(`http://localhost:8005/estimate-prevalence?disease_name=${encodeURIComponent(disease.name)}`)
+            if (!response.ok) {
+              // Handle 404 or other errors gracefully
+              return {
+                ...disease,
+                prevalence: "Data not available",
+                treatmentStatus: "Unknown",
+                sources: ["Data source unavailable"],
+              }
+            }
+            
+            const prevalenceData = await response.json()
+            return {
+              ...disease,
+              prevalence: prevalenceData.prevalence,
+              treatmentStatus: prevalenceData.treatmentStatus,
+              sources: prevalenceData.sources,
+            }
+          } catch (error) {
+            console.error(`Failed to get prevalence for ${disease.name}:`, error)
+            return {
+              ...disease,
+              prevalence: "Data not available",
+              treatmentStatus: "Unknown",
+              sources: ["Data source unavailable"],
+            }
+          }
+        })
+      )
 
-    const updatedDiseases = diseases.map((disease) => ({
-      ...disease,
-      prevalence: getRandomPrevalence(),
-      treatmentStatus: getRandomTreatmentStatus(),
-      sources: ["PubMed", "ClinicalTrials.gov", "FDA Database"],
-    }))
-
-    setDiseases(updatedDiseases)
-    setActionStates((prev) => ({ ...prev, prevalence: "success" }))
+      setDiseases(updatedDiseases)
+      setActionStates((prev) => ({ ...prev, prevalence: "success" }))
+    } catch (error) {
+      console.error('Prevalence estimation failed:', error)
+      setActionStates((prev) => ({ ...prev, prevalence: "error" }))
+    }
   }
 
   const handlePrioritize = async () => {
@@ -105,18 +96,44 @@ export default function Home() {
 
     setActionStates((prev) => ({ ...prev, prioritize: "loading" }))
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      const response = await fetch('http://localhost:8005/prioritize', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          diseases: diseases.map(d => d.name)
+        }),
+      })
 
-    const updatedDiseases = diseases
-      .map((disease) => ({
-        ...disease,
-        priorityScore: Math.floor(Math.random() * 100) + 1,
-      }))
-      .sort((a, b) => b.priorityScore - a.priorityScore)
+      if (!response.ok) throw new Error('Failed to prioritize diseases')
+      
+      const data = await response.json()
+      
+      // Map the prioritized results back to our disease objects
+      type PrioritizedData = { disease_name: string; priority_score: number; treatment_status: string }
+      const prioritizedDiseasesMap = new Map<string, PrioritizedData>(
+        data.prioritized_diseases.map((item: PrioritizedData) => [item.disease_name, item])
+      )
+      
+      const updatedDiseases = diseases
+        .map((disease) => {
+          const prioritizedData = prioritizedDiseasesMap.get(disease.name)
+          return {
+            ...disease,
+            priorityScore: prioritizedData?.priority_score || 0,
+            treatmentStatus: prioritizedData?.treatment_status || disease.treatmentStatus,
+          }
+        })
+        .sort((a, b) => b.priorityScore - a.priorityScore)
 
-    setDiseases(updatedDiseases)
-    setActionStates((prev) => ({ ...prev, prioritize: "success" }))
+      setDiseases(updatedDiseases)
+      setActionStates((prev) => ({ ...prev, prioritize: "success" }))
+    } catch (error) {
+      console.error('Disease prioritization failed:', error)
+      setActionStates((prev) => ({ ...prev, prioritize: "error" }))
+    }
   }
 
   return (
@@ -149,17 +166,4 @@ export default function Home() {
   )
 }
 
-function getRandomPrevalence(): string {
-  const values = ["2.1M in US", "5.8M in US", "12.3M in US", "850K in US", "3.2M in US"]
-  return values[Math.floor(Math.random() * values.length)]
-}
 
-function getRandomTreatmentStatus(): string {
-  const statuses = [
-    "No approved therapy",
-    "Limited treatment options",
-    "Off-label use only",
-    "Symptomatic treatment only",
-  ]
-  return statuses[Math.floor(Math.random() * statuses.length)]
-}
