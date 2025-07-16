@@ -83,6 +83,43 @@ export function ResultsPanel({ diseases, onRowClick }: ResultsPanelProps) {
           </div>
         ) : (
           <>
+            {/* Filter Controls - TODO: Make these actually filter the results */}
+            <div className="mb-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <label className="text-sm font-medium text-gray-700">Prevalence:</label>
+                  <select className="border border-gray-300 rounded px-2 py-1 text-sm">
+                    <option value="">All</option>
+                    <option value="high">{">"} 5M patients</option>
+                    <option value="medium">1-5M patients</option>
+                    <option value="low">{"<"} 1M patients</option>
+                  </select>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <label className="text-sm font-medium text-gray-700">Treatment Status:</label>
+                  <select className="border border-gray-300 rounded px-2 py-1 text-sm">
+                    <option value="">All</option>
+                    <option value="none">No approved therapy</option>
+                    <option value="limited">Limited options</option>
+                    <option value="available">Standard therapy available</option>
+                  </select>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <label className="text-sm font-medium text-gray-700">Priority Score:</label>
+                  <select className="border border-gray-300 rounded px-2 py-1 text-sm">
+                    <option value="">All</option>
+                    <option value="high">80+ (High)</option>
+                    <option value="medium">60-79 (Medium)</option>
+                    <option value="low">{"<"} 60 (Low)</option>
+                  </select>
+                </div>
+                
+                <button className="text-sm text-blue-600 hover:text-blue-800">Clear Filters</button>
+              </div>
+            </div>
+            
             <div className="flex-1 overflow-auto">
               <Table>
                 <TableHeader>
