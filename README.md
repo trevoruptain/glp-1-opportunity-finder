@@ -23,12 +23,12 @@ This app is designed for hands-on AI-assisted coding practice. Pick a challenge 
 
 1. **📊 Export Report Feature** - Build a CSV download feature
    ```bash
-   git checkout workshop-1-export
+   git checkout -b workshop-1-export origin/workshop-1-export
    ```
 
 2. **🐛 Debug Broken Prioritization** - Fix the scoring algorithm  
    ```bash
-   git checkout workshop-2-debug
+   git checkout -b workshop-2-debug origin/workshop-2-debug
    ```
 
 3. **🔍 Add Search Filters** - Build filtering UI components
