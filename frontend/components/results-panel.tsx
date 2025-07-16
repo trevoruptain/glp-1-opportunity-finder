@@ -61,24 +61,9 @@ export function ResultsPanel({ diseases, onRowClick }: ResultsPanelProps) {
     <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
             <BarChart3 className="h-5 w-5 text-blue-600" />
             <span>Indication Results</span>
             {diseases.length > 0 && <Badge variant="secondary">{diseases.length} found</Badge>}
-          </div>
-          {diseases.length > 0 && (
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => {
-                // TODO: Implement CSV export functionality
-                alert("Export functionality not implemented yet!")
-              }}
-            >
-              <Download className="h-4 w-4 mr-2" />
-              Export Report
-            </Button>
-          )}
         </CardTitle>
         <CardDescription>
           {diseases.length === 0
