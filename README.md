@@ -13,6 +13,42 @@ glp-1-opportunity-finder/
 
 ## Quick Start
 
+### Option 1: Docker (Recommended)
+
+The easiest way to run the entire application:
+
+1. **Prerequisites**: Install [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
+
+2. **Run the application**:
+
+   **For production-like setup:**
+   ```bash
+   docker-compose up --build
+   ```
+
+   **For development with hot reload:**
+   ```bash
+   docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build
+   ```
+   
+   **Or use the convenience script:**
+   ```bash
+   ./start.sh
+   ```
+
+This will:
+- Build and start both frontend and backend containers
+- Frontend available at `http://localhost:3000`
+- Backend API available at `http://localhost:8005`
+- API docs at `http://localhost:8005/docs`
+
+3. **Stop the application**:
+```bash
+docker-compose down
+```
+
+### Option 2: Manual Setup
+
 ### Backend Setup
 
 1. Navigate to the backend directory:
@@ -86,4 +122,43 @@ The backend provides the following endpoints:
 
 ## Development
 
-Both components support hot reloading during development. The frontend automatically proxies API calls to the backend when both are running locally. 
+### Docker Commands
+
+```bash
+# Start in production mode
+docker-compose up --build
+
+# Start in development mode (with hot reload)
+./start-dev.sh
+
+# Stop the application
+docker-compose down
+
+# View logs
+docker-compose logs -f
+
+# Rebuild specific service
+docker-compose build --no-cache backend
+docker-compose build --no-cache frontend
+```
+
+### Manual Development
+
+Both components support hot reloading during development. The frontend automatically proxies API calls to the backend when both are running locally.
+
+### Project Structure After Docker Setup
+
+```
+glp-1-opportunity-finder/
+├── frontend/              # Next.js React application
+│   ├── Dockerfile
+│   └── .dockerignore
+├── backend/               # FastAPI Python backend  
+│   ├── Dockerfile
+│   └── .dockerignore
+├── docker-compose.yml     # Production Docker setup
+├── docker-compose.override.yml  # Development overrides
+├── start.sh              # Quick start script
+├── start-dev.sh         # Development start script
+└── README.md
+``` 
