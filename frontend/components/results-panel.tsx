@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { ChevronLeft, ChevronRight, BarChart3, ExternalLink, ArrowUpDown, Info } from "lucide-react"
+import { ChevronLeft, ChevronRight, BarChart3, ExternalLink, ArrowUpDown, Info, Download } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import type { Disease } from "@/types"
 
@@ -60,10 +60,25 @@ export function ResultsPanel({ diseases, onRowClick }: ResultsPanelProps) {
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
-        <CardTitle className="flex items-center space-x-2">
-          <BarChart3 className="h-5 w-5 text-blue-600" />
-          <span>Indication Results</span>
-          {diseases.length > 0 && <Badge variant="secondary">{diseases.length} found</Badge>}
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <BarChart3 className="h-5 w-5 text-blue-600" />
+            <span>Indication Results</span>
+            {diseases.length > 0 && <Badge variant="secondary">{diseases.length} found</Badge>}
+          </div>
+          {diseases.length > 0 && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => {
+                // TODO: Implement CSV export functionality
+                alert("Export functionality not implemented yet!")
+              }}
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export Report
+            </Button>
+          )}
         </CardTitle>
         <CardDescription>
           {diseases.length === 0
