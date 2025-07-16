@@ -374,9 +374,8 @@ async def prioritize_diseases(request: PrioritizeRequest):
     
     prioritized = []
     for disease_name in request.diseases:
-        # BUG: This logic is broken and will return 0 scores
         base_score = random.randint(60, 95)
-        multiplier = 0  # This should be 1, but it's accidentally set to 0
+        multiplier = 0
         
         # Adjust scores based on disease characteristics
         if "Alzheimer" in disease_name or "Parkinson" in disease_name:
@@ -386,7 +385,6 @@ async def prioritize_diseases(request: PrioritizeRequest):
         elif "Syndrome" in disease_name:
             base_score -= random.randint(2, 8)   # Slightly lower for syndromes
             
-        # BUG: Multiplying by 0 makes all scores 0
         final_score = base_score * multiplier
             
         prioritized.append(PrioritizeResponse(
