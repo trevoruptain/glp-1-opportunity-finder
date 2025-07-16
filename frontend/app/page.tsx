@@ -67,7 +67,8 @@ export default function Home() {
             const prevalenceData = await response.json()
             return {
               ...disease,
-              prevalence: prevalenceData.prevalence,
+              // BUG: Wrong property name - should be prevalenceData.prevalence  
+              prevalence: prevalenceData.prevalanceCount,  // Typo: prevalanceCount doesn't exist
               treatmentStatus: prevalenceData.treatmentStatus,
               sources: prevalenceData.sources,
             }
